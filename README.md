@@ -1,6 +1,6 @@
 # ICD Code Generator using Ollama and Streamlit on AWS EC2
 
-This project implements an ICD (International Classification of Diseases) code generation system using a custom language model through Ollama, deployed on AWS EC2 using Docker and presented via a Streamlit interface.
+This project implements an ICD10 (International Classification of Diseases) code generation system using a custom fine-tuned language model through Ollama, deployed on AWS EC2 using Docker and presented via a Streamlit interface.
 
 ## Table of Contents
 - [System Architecture](#system-architecture)
@@ -18,7 +18,8 @@ This project implements an ICD (International Classification of Diseases) code g
 ## System Architecture
 
 The system consists of several components:
-- Custom Language Model (deployed via Ollama)
+- Custom Fine-tuned Language Model (available at hf.co/vimleshc57/icd10-finetuned-16bit)
+- Ollama for model serving
 - Docker container for model isolation
 - Streamlit web interface
 - AWS EC2 instance for hosting
@@ -33,6 +34,11 @@ The system consists of several components:
 - AWS Account
 - Basic understanding of terminal/command line
 
+### Model Requirements
+- Minimum 8GB RAM
+- 20GB free disk space
+- CUDA-compatible GPU recommended for faster inference
+
 ### Required Python Packages
 ```bash
 streamlit>=1.24.0
@@ -46,38 +52,62 @@ requests>=2.28.0
 1. Clone the repository:
 ```bash
 git clone https://github.com/Vimlesh-17/ICD10-llama3.2.git
-
+cd ICD10-llama3.2
 ```
 
-2. Create and activate virtual environment:
+2. Install Ollama:
+```bash
+curl https://ollama.ai/install.sh | sh
+```
+
+3. Pull the custom fine-tuned model:
+```bash
+ollama run hf.co/vimleshc57/icd10-finetuned-16bit
+```
+
+4. Create and activate virtual environment:
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: .\venv\Scripts\activate
 ```
 
-3. Install dependencies:
+5. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
 ## Docker Setup
 
-1. Build the custom model image:
+1. Create a Dockerfile.model with the custom model:
+```dockerfile
+FROM ollama/ollama
+
+# Pull the custom model during build
+RUN ollama pull hf.co/vimleshc57/icd10-finetuned-16bit
+
+# Set the model as default
+ENV DEFAULT_MODEL=hf.co/vimleshc57/icd10-finetuned-16bit
+
+# Expose Ollama port
+EXPOSE 11434
+```
+
+2. Build the custom model image:
 ```bash
 docker build -t icd-model-image -f Dockerfile.model .
 ```
 
-2. Build the application image:
+3. Build the application image:
 ```bash
 docker build -t icd-app-image -f Dockerfile.app .
 ```
 
-3. Create a Docker network:
+4. Create a Docker network:
 ```bash
 docker network create icd-network
 ```
 
-4. Run the containers:
+5. Run the containers:
 ```bash
 docker run -d --name model-container --network icd-network icd-model-image
 docker run -d --name app-container --network icd-network -p 8501:8501 icd-app-image
@@ -87,7 +117,7 @@ docker run -d --name app-container --network icd-network -p 8501:8501 icd-app-im
 
 1. Launch EC2 Instance:
    - Choose Ubuntu Server 22.04 LTS
-   - Recommended: t2.large or better
+   - Recommended: t2.xlarge or better (for model requirements)
    - Storage: Minimum 30GB EBS
    - Configure Security Group:
      ```
@@ -143,8 +173,25 @@ https://your-domain.com
 2. Using the Interface:
    - Enter medical text in the input field
    - Click "Generate ICD Codes"
+   - The custom fine-tuned model will analyze the text and generate relevant ICD10 codes
    - View generated codes and descriptions
    - Export results if needed
+
+## Model Information
+
+### Custom Fine-tuned Model Details
+- Model Name: ICD10 Fine-tuned Model
+- Location: hf.co/vimleshc57/icd10-finetuned-16bit
+- Base Architecture: LLaMA
+- Fine-tuning Dataset: ICD10 medical coding dataset
+- Quantization: 16-bit for optimal performance/memory trade-off
+- Supported Tasks: Medical text analysis and ICD10 code generation
+
+### Model Performance
+- Optimized for medical terminology
+- Enhanced accuracy for ICD10 code generation
+- Reduced hallucination for medical contexts
+- Fast inference times with 16-bit quantization
 
 ## Troubleshooting
 
@@ -176,6 +223,18 @@ docker network inspect icd-network
 
 # Verify ports
 netstat -tulpn | grep LISTEN
+```
+
+Additional Model-Specific Troubleshooting:
+```bash
+# Verify model installation
+ollama list
+
+# Check model status
+ollama show hf.co/vimleshc57/icd10-finetuned-16bit
+
+# Test model directly
+ollama run hf.co/vimleshc57/icd10-finetuned-16bit "Test prompt"
 ```
 
 ## Security Considerations
@@ -214,6 +273,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 For support or queries, please contact:
 - Email: vimleshc7317@gmail.com
+- Model Repository: https://huggingface.co/vimleshc57/icd10-finetuned-16bit
 - Issue Tracker: GitHub Issues
 
 ## Acknowledgments
