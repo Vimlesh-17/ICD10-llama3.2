@@ -18,7 +18,7 @@ This project implements an ICD10 (International Classification of Diseases) code
 ## System Architecture
 
 The system consists of several components:
-- Custom Fine-tuned Language Model (available at hf.co/vimleshc57/icd10-finetuned-16bit)
+- Custom Fine-tuned Language Model (available at [hf.co/vimleshc57/icd10-finetuned-16bit](https://hf.co/vimleshc57/icd10-finetuned-16bit))
 - Ollama for model serving
 - Docker container for model isolation
 - Streamlit web interface
@@ -28,7 +28,7 @@ The system consists of several components:
 ## Prerequisites
 
 ### Local Development
-- Python 3.8+
+- Python 3.8+ (preferred 3.10+)
 - Docker Desktop
 - Git
 - AWS Account
@@ -41,10 +41,12 @@ The system consists of several components:
 
 ### Required Python Packages
 ```bash
-streamlit>=1.24.0
-ollama>=0.1.0
-python-dotenv>=0.19.0
-requests>=2.28.0
+transformers==4.35.0
+torch==2.0.1
+huggingface-hub==0.24.0
+streamlit==1.24.0
+python-dotenv==0.19.0
+langchain-ollama==0.1.0
 ```
 
 ## Installation
@@ -183,7 +185,10 @@ https://your-domain.com
 Below is an example of the ICD10 code generation using our fine-tuned model, showing accurate and properly formatted results:
 
 ![Fine-tuned Model Output](123.png)
-*Figure 1: Custom fine-tuned model generating accurate and properly formatted ICD10 codes*
+*Figure 1: Interface of the fine-tuned model to determine ICD10 codes*
+
+![Fine-tuned Model Additional Output](12345.png)
+*Figure 1.1:Example of custom fine-tuned model output demonstrating consistent accuracy*
 
 #### Base Model Comparison
 For comparison, here's the output from the base LLaMA 3.2 model, showing incorrect formatting and low accuracy:
@@ -202,7 +207,7 @@ For comparison, here's the output from the base LLaMA 3.2 model, showing incorre
 
 ### Custom Fine-tuned Model Details
 - Model Name: ICD10 Fine-tuned Model
-- Location: hf.co/vimleshc57/icd10-finetuned-16bit
+- Location: [hf.co/vimleshc57/icd10-finetuned-16bit](https://hf.co/vimleshc57/icd10-finetuned-16bit)
 - Base Architecture: LLaMA
 - Fine-tuning Dataset: ICD10 medical coding dataset
 - Quantization: 16-bit for optimal performance/memory trade-off
@@ -294,7 +299,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 For support or queries, please contact:
 - Email: vimleshc7317@gmail.com
-- Model Repository: https://huggingface.co/vimleshc57/icd10-finetuned-16bit
+- Model Repository: [https://huggingface.co/vimleshc57/icd10-finetuned-16bit](https://huggingface.co/vimleshc57/icd10-finetuned-16bit)
 - Issue Tracker: GitHub Issues
 
 ## Acknowledgments
