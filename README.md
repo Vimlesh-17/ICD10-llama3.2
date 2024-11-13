@@ -177,6 +177,27 @@ https://your-domain.com
    - View generated codes and descriptions
    - Export results if needed
 
+### Example Usage and Model Comparison
+
+#### Fine-tuned Model Output
+Below is an example of the ICD10 code generation using our fine-tuned model, showing accurate and properly formatted results:
+
+![Fine-tuned Model Output](123.png)
+*Figure 1: Custom fine-tuned model generating accurate and properly formatted ICD10 codes*
+
+#### Base Model Comparison
+For comparison, here's the output from the base LLaMA 3.2 model, showing incorrect formatting and low accuracy:
+
+![Base Model Output](124.png)
+*Figure 2: Base LLaMA 3.2 model showing incorrect formatting and low accuracy in ICD10 code generation*
+
+### Key Improvements in Fine-tuned Model
+- Proper formatting of ICD10 codes
+- Higher accuracy in code assignment
+- Better understanding of medical terminology
+- Structured output format
+- Relevant code descriptions
+
 ## Model Information
 
 ### Custom Fine-tuned Model Details
